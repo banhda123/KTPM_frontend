@@ -8,6 +8,7 @@ import MainLayout from './core/layouts/MainLayout';
 import HomePage from './modules/home/views/HomePage';
 import ProductListPage from './modules/products/views/ProductListPage';
 import ProductDetailPage from './modules/products/views/ProductDetailPage';
+import TestProductPage from './modules/products/views/TestProductPage';
 import CartPage from './modules/cart/views/CartPage';
 import CheckoutPage from './modules/checkout/views/CheckoutPage';
 import ContactPage from './modules/contact/views/ContactPage';
@@ -23,6 +24,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="products" element={<ProductListPage />} />
         <Route path="products/:id" element={<ProductDetailPage />} />
+        <Route path="test-products" element={<TestProductPage />} />
         <Route path="cart" element={<CartPage />} />
         <Route path="checkout" element={<CheckoutPage />} />
         <Route path="contact" element={<ContactPage />} />

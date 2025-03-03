@@ -176,7 +176,7 @@ const ProductCard = ({ product }) => {
     price: product?.price || 22000,
     salePrice: product?.salePrice || null,
     category: product?.category || 'Bút viết',
-    image: product?.image || 'https://via.placeholder.com/300',
+    image: product?.images?.[0] || 'https://placehold.co/300x300/f0f0f0/333333?text=No+Image',
     rating: product?.rating || 4.5,
     reviewCount: product?.reviewCount || 120,
     isNew: product?.isNew || true,
@@ -206,11 +206,16 @@ const ProductCard = ({ product }) => {
     }).format(value);
   };
   
+  // Handle image error
+  const handleImageError = (e) => {
+    e.target.src = 'https://placehold.co/300x300/f0f0f0/333333?text=No+Image';
+  };
+  
   return (
     <Card>
       <ProductImage>
         <Link to={`/products/${id}`}>
-          <img src={image} alt={name} />
+          <img src={image} alt={name} onError={handleImageError} />
         </Link>
         {isNew && <NewBadge>Mới</NewBadge>}
         {salePrice && <DiscountBadge>-{discountPercentage}%</DiscountBadge>}

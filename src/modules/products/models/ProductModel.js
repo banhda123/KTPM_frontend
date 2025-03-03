@@ -1,6 +1,6 @@
 // ProductModel.js - Defines the data structure for products and handles data operations
 
-import { api } from '../../../services/api';
+import api from '../../../services/api';
 
 class ProductModel {
   constructor(data = {}) {
@@ -48,8 +48,14 @@ class ProductModel {
   // Static methods for API operations
   static async getAll(params = {}) {
     try {
-      const response = await api.get('/products', { params });
-      return response.data.map(product => new ProductModel(product));
+      const response = await api.getProducts(params);
+      
+      // Handle both direct API response and mock API response structures
+      const products = response.data ? response.data : response;
+      
+      return Array.isArray(products) ? 
+        products.map(product => new ProductModel(product)) : 
+        [];
     } catch (error) {
       console.error('Error fetching products:', error);
       throw error;
@@ -58,8 +64,12 @@ class ProductModel {
 
   static async getById(id) {
     try {
-      const response = await api.get(`/products/${id}`);
-      return new ProductModel(response.data);
+      const response = await api.getProductById(id);
+      
+      // Handle both direct API response and mock API response structures
+      const product = response.data ? response.data : response;
+      
+      return new ProductModel(product);
     } catch (error) {
       console.error(`Error fetching product with id ${id}:`, error);
       throw error;
@@ -68,10 +78,17 @@ class ProductModel {
 
   static async getByCategory(category, params = {}) {
     try {
-      const response = await api.get(`/products`, {
-        params: { category, ...params }
+      const response = await api.getProducts({
+        category,
+        ...params
       });
-      return response.data.map(product => new ProductModel(product));
+      
+      // Handle both direct API response and mock API response structures
+      const products = response.data ? response.data : response;
+      
+      return Array.isArray(products) ? 
+        products.map(product => new ProductModel(product)) : 
+        [];
     } catch (error) {
       console.error(`Error fetching products in category ${category}:`, error);
       throw error;
@@ -80,10 +97,18 @@ class ProductModel {
 
   static async search(query, params = {}) {
     try {
-      const response = await api.get(`/products/search`, {
-        params: { query, ...params }
+      // In a real app, this would call a dedicated search endpoint
+      const response = await api.getProducts({
+        search: query,
+        ...params
       });
-      return response.data.map(product => new ProductModel(product));
+      
+      // Handle both direct API response and mock API response structures
+      const products = response.data ? response.data : response;
+      
+      return Array.isArray(products) ? 
+        products.map(product => new ProductModel(product)) : 
+        [];
     } catch (error) {
       console.error(`Error searching products with query ${query}:`, error);
       throw error;

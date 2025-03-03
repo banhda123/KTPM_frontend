@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { FaFilter } from 'react-icons/fa';
+import { FaFilter, FaAngleDown, FaAngleRight } from 'react-icons/fa';
 
 const FilterContainer = styled.div`
   background-color: #fff;
@@ -92,11 +92,6 @@ const PriceRangeContainer = styled.div`
   gap: 10px;
 `;
 
-const RangeSlider = styled.input`
-  width: 100%;
-  margin: 10px 0;
-`;
-
 const PriceInputs = styled.div`
   display: flex;
   gap: 10px;
@@ -149,8 +144,56 @@ const ResetButton = styled(Button)`
   }
 `;
 
+const CategoryMenu = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+
+const CategoryItem = styled.div`
+  border-bottom: 1px solid #eee;
+`;
+
+const CategoryHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  cursor: pointer;
+  font-weight: ${props => props.isActive ? '600' : '400'};
+  color: ${props => props.isActive ? '#0066cc' : '#333'};
+  
+  &:hover {
+    color: #0066cc;
+  }
+`;
+
+const CategoryName = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const SubcategoryList = styled.div`
+  max-height: ${props => props.isOpen ? '500px' : '0'};
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+  padding-left: 20px;
+`;
+
+const SubcategoryItem = styled.div`
+  padding: 8px 0;
+  cursor: pointer;
+  color: #555;
+  
+  &:hover {
+    color: #0066cc;
+  }
+`;
+
 const FilterPanel = ({ filters, onFilterChange }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [openCategories, setOpenCategories] = useState({});
   const [localFilters, setLocalFilters] = useState({
     categories: [],
     priceMin: '',
@@ -165,16 +208,28 @@ const FilterPanel = ({ filters, onFilterChange }) => {
     setIsOpen(!isOpen);
   };
   
-  const handleCategoryChange = (e) => {
-    const { value, checked } = e.target;
+  const toggleCategory = (categoryId) => {
+    setOpenCategories(prev => ({
+      ...prev,
+      [categoryId]: !prev[categoryId]
+    }));
+  };
+  
+  const handleCategoryClick = (categoryId) => {
+    toggleCategory(categoryId);
     
-    setLocalFilters(prev => {
-      const newCategories = checked
-        ? [...prev.categories, value]
-        : prev.categories.filter(cat => cat !== value);
-      
-      return { ...prev, categories: newCategories };
-    });
+    // You can also implement category selection here if needed
+    // For example:
+    // onFilterChange({ ...localFilters, category: categoryId });
+  };
+  
+  const handleSubcategoryClick = (categoryId, subcategory) => {
+    // Implement subcategory selection logic here
+    // For example:
+    // onFilterChange({ ...localFilters, category: categoryId, subcategory });
+    
+    // For now, we'll just log the selection
+    console.log(`Selected: ${categoryId} > ${subcategory}`);
   };
   
   const handleBrandChange = (e) => {
@@ -217,13 +272,86 @@ const FilterPanel = ({ filters, onFilterChange }) => {
     onFilterChange(resetFilters);
   };
   
-  // Mock categories and brands
-  const categories = [
-    { id: 'cat1', name: 'Bút viết' },
-    { id: 'cat2', name: 'Văn phòng phẩm' },
-    { id: 'cat3', name: 'Dụng cụ học tập' },
-    { id: 'cat4', name: 'Mỹ thuật' },
-    { id: 'cat5', name: 'Giấy in' }
+  const productCategories = [
+    {
+      id: 'cat1',
+      name: 'Bút viết',
+      subcategories: [
+        'Bút bi, bút mực, bút chì',
+        'Bút dạ quang, bút lông dầu',
+        'Bút gel, bút máy, bút dạ bảng',
+        'Bút xoá, bút thử điện'
+      ]
+    },
+    {
+      id: 'cat2',
+      name: 'Văn phòng phẩm',
+      subcategories: [
+        'Kẹp giấy, kẹp bướm, gim bấm',
+        'Băng keo, hồ dán, kéo',
+        'Tập vở, sổ ghi chép, sổ tay',
+        'Bìa hồ sơ, bìa nhựa, file đựng giấy',
+        'Máy dập ghim, bấm lỗ, dao rọc giấy'
+      ]
+    },
+    {
+      id: 'cat3',
+      name: 'Dụng Cụ Học Tập',
+      subcategories: [
+        'Thước kẻ, ê ke, compa',
+        'Bảng vẽ, bảng con, phấn viết',
+        'Cặp sách, balo, hộp bút',
+        'Tẩy, chuốt bút chì'
+      ]
+    },
+    {
+      id: 'cat4',
+      name: 'Mỹ Thuật',
+      subcategories: [
+        'Màu nước, màu sáp, màu acrylic',
+        'Bút lông vẽ, cọ vẽ, bảng pha màu',
+        'Đất nặn, giấy mỹ thuật, giấy màu',
+        'Canvas vẽ tranh, giá vẽ'
+      ]
+    },
+    {
+      id: 'cat5',
+      name: 'Giấy In',
+      subcategories: [
+        'Giấy A4, A3, A5',
+        'Giấy decal, giấy ảnh, giấy than',
+        'Giấy in nhiệt, giấy in hóa đơn'
+      ]
+    },
+    {
+      id: 'cat6',
+      name: 'Bút cao cấp',
+      subcategories: [
+        'Bút máy cao cấp, bút ký tên',
+        'Bút bi thương hiệu, bút quà tặng',
+        'Bút khắc tên, bút làm quà tặng doanh nghiệp'
+      ]
+    },
+    {
+      id: 'cat7',
+      name: 'STEAM & DIY',
+      subcategories: [
+        'Bộ lắp ráp mô hình',
+        'Đồ chơi khoa học, STEM',
+        'Robot lập trình, kit Arduino, Raspberry Pi',
+        'Dụng cụ DIY, keo nến, máy cắt laser mini'
+      ]
+    },
+    {
+      id: 'cat8',
+      name: 'Sách',
+      subcategories: [
+        'Sách giáo khoa, sách tham khảo',
+        'Truyện tranh, tiểu thuyết, sách kỹ năng',
+        'Sách học ngoại ngữ, từ điển',
+        'Sách tô màu, sách vẽ tranh'
+      ]
+    }
   ];
   
   const brands = [
@@ -248,20 +376,32 @@ const FilterPanel = ({ filters, onFilterChange }) => {
       
       <FilterContent isOpen={isOpen}>
         <FilterSection>
-          <SectionTitle>Danh mục</SectionTitle>
-          <CheckboxGroup>
-            {categories.map(category => (
-              <CheckboxLabel key={category.id}>
-                <Checkbox 
-                  type="checkbox" 
-                  value={category.id}
-                  checked={localFilters.categories.includes(category.id)}
-                  onChange={handleCategoryChange}
-                />
-                {category.name}
-              </CheckboxLabel>
+          <SectionTitle>Danh mục sản phẩm</SectionTitle>
+          <CategoryMenu>
+            {productCategories.map((category) => (
+              <CategoryItem key={category.id}>
+                <CategoryHeader 
+                  isActive={openCategories[category.id]} 
+                  onClick={() => handleCategoryClick(category.id)}
+                >
+                  <CategoryName>
+                    {openCategories[category.id] ? <FaAngleDown /> : <FaAngleRight />}
+                    {category.name}
+                  </CategoryName>
+                </CategoryHeader>
+                <SubcategoryList isOpen={openCategories[category.id]}>
+                  {category.subcategories.map((subcategory, index) => (
+                    <SubcategoryItem 
+                      key={index}
+                      onClick={() => handleSubcategoryClick(category.id, subcategory)}
+                    >
+                      {subcategory}
+                    </SubcategoryItem>
+                  ))}
+                </SubcategoryList>
+              </CategoryItem>
             ))}
-          </CheckboxGroup>
+          </CategoryMenu>
         </FilterSection>
         
         <FilterSection>

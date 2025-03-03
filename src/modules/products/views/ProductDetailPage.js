@@ -355,6 +355,10 @@ const ProductDetailPage = () => {
     alert(`Đã thêm ${quantity} sản phẩm vào giỏ hàng!`);
   };
   
+  const handleImageError = (e) => {
+    e.target.src = 'https://placehold.co/600x400/f0f0f0/333333?text=Image+Not+Available';
+  };
+  
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -375,10 +379,10 @@ const ProductDetailPage = () => {
     salePrice: product.salePrice || null,
     category: product.category || 'Bút viết',
     description: product.description || 'Bút bi cao cấp với thiết kế hiện đại, mực viết trơn tru và bền màu. Sản phẩm được sản xuất theo công nghệ tiên tiến, đảm bảo chất lượng và độ bền cao.',
-    images: product.images || [
-      'https://via.placeholder.com/600x400?text=Product-1',
-      'https://via.placeholder.com/600x400?text=Product-2',
-      'https://via.placeholder.com/600x400?text=Product-3'
+    images: product.images && product.images.length > 0 ? product.images : [
+      'https://placehold.co/600x400/f0f0f0/333333?text=Product-Image-1',
+      'https://placehold.co/600x400/f0f0f0/333333?text=Product-Image-2',
+      'https://placehold.co/600x400/f0f0f0/333333?text=Product-Image-3'
     ],
     stock: product.stock || 15,
     rating: product.rating || 4.5,
@@ -480,7 +484,7 @@ const ProductDetailPage = () => {
       <ProductGrid>
         <ImageGallery>
           <MainImage>
-            <img src={images[selectedImage]} alt={name} />
+            <img src={images[selectedImage]} alt={name} onError={handleImageError} />
           </MainImage>
           <ThumbnailsContainer>
             {images.map((image, index) => (
@@ -489,7 +493,7 @@ const ProductDetailPage = () => {
                 active={index === selectedImage}
                 onClick={() => setSelectedImage(index)}
               >
-                <img src={image} alt={`${name} - ${index + 1}`} />
+                <img src={image} alt={`${name} - ${index + 1}`} onError={handleImageError} />
               </Thumbnail>
             ))}
           </ThumbnailsContainer>

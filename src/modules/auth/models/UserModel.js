@@ -1,6 +1,6 @@
 // UserModel.js - Defines the data structure for user and handles user data operations
 
-import { api } from '../../../services/api';
+import api from '../../../services/api';
 
 class UserModel {
   constructor(data = {}) {

@@ -66,7 +66,7 @@ export const mockApi = {
                     index % 5 === 1 ? 'Văn phòng phẩm' : 
                     index % 5 === 2 ? 'Dụng cụ học tập' : 
                     index % 5 === 3 ? 'Mỹ thuật' : 'Giấy in',
-          images: [`https://via.placeholder.com/300?text=Product-${index + 1}`],
+          images: [`https://placehold.co/300x300/f0f0f0/333333?text=Product-${index + 1}`],
           stock: index % 7 === 0 ? 0 : 10 + (index * 2),
           rating: 3 + (Math.random() * 2),
           reviews: [],
@@ -145,9 +145,9 @@ export const mockApi = {
                     index % 5 === 2 ? 'Dụng cụ học tập' : 
                     index % 5 === 3 ? 'Mỹ thuật' : 'Giấy in',
           images: [
-            `https://via.placeholder.com/600x400?text=Product-${index}-1`,
-            `https://via.placeholder.com/600x400?text=Product-${index}-2`,
-            `https://via.placeholder.com/600x400?text=Product-${index}-3`
+            `https://placehold.co/600x400/f0f0f0/333333?text=Product-${index}-1`,
+            `https://placehold.co/600x400/f0f0f0/333333?text=Product-${index}-2`,
+            `https://placehold.co/600x400/f0f0f0/333333?text=Product-${index}-3`
           ],
           stock: index % 7 === 0 ? 0 : 10 + (index * 2),
           rating: 3 + (Math.random() * 2),
@@ -169,7 +169,7 @@ export const mockApi = {
           },
           createdAt: new Date(Date.now() - (index * 86400000)).toISOString(),
           updatedAt: new Date().toISOString()
-        };
+        }
         
         if (id.includes('invalid')) {
           reject({ message: 'Product not found' });

@@ -1,6 +1,6 @@
 // CartModel.js - Defines the data structure for cart and handles data operations
 
-import { api } from '../../../services/api';
+import api from '../../../services/api';
 
 class CartModel {
   constructor(data = {}) {

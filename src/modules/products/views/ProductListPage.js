@@ -130,8 +130,21 @@ const ProductListPage = () => {
           result = await ProductController.getAllProducts(params);
         }
         
-        setProducts(result);
-        setTotalItems(100); // This would come from API response in a real app
+        // Check if result has data property (from API response)
+        if (result && result.data) {
+          setProducts(result.data);
+          // If meta information is available, use it for pagination
+          if (result.meta) {
+            setTotalItems(result.meta.total);
+          } else {
+            setTotalItems(result.data.length * 10); // Fallback estimate
+          }
+        } else {
+          // If result is already an array (from mock API)
+          setProducts(result);
+          setTotalItems(result.length * 10); // Fallback estimate for pagination
+        }
+        
         setError(null);
       } catch (err) {
         setError('Failed to load products. Please try again later.');
